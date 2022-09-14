@@ -1,0 +1,14 @@
+const { getNamedAccounts } = require("hardhat");
+const { getWeth } = require("../scripts/getWeth");
+
+async function main() {
+    // the AAVE protocol treats everything as an ERC20 token
+    await getWeth();
+}
+
+main()
+    .then(() => process.exit(0))
+    .catch((error) => {
+        console.error(error)
+        process.exit(1)
+    })
