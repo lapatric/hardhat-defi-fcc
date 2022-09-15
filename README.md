@@ -2,7 +2,7 @@
 
 ### 1. Deposit collateral: ETH / WETH
 
-The AAVE protocol treats everything as an ERC20 token. Therefore if we deposit ETH which is the native token of the blockchain and not an ERC20 token, it will be passed through the WETH gateway which converts it to WETH (ERC20 ETH). Alternatively, we can also deposit WETH directly. 
+The AAVE protocol treats everything as an ERC20 token. Therefore if we deposit ETH which is the native token of the blockchain and not an ERC20 token, it will automatically be passed through the WETH gateway which converts it to WETH (ERC20 ETH). Alternatively, we can also deposit WETH directly by manually obtaining our WETH first. 
 
 ### 2. Borrow another asset: DAI
 
