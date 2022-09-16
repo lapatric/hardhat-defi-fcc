@@ -1,12 +1,16 @@
 ## Borrowing & Lending with AAVE (DeFi)
 
-### 1. Deposit collateral: ETH / WETH
+### 1. Depositing collateral: ETH / WETH
 
 The AAVE protocol treats everything as an ERC20 token. Therefore if we deposit ETH which is the native token of the blockchain and not an ERC20 token, it will automatically be passed through the WETH gateway which converts it to WETH (ERC20 ETH). Alternatively, we can also deposit WETH directly by manually obtaining our WETH first. 
 
-### 2. Borrow another asset: DAI
+### 2. Borrowing an asset: DAI
 
-### 3. Repay the DAI
+Having deposited WETH into the LendingPool, we can now borrow a certain amount of other tokens (DAI in this example). However, the value of the ETH amount we collateralized must at all times be greater than the value of the tokens we borrow (with some margin), i.e. we must remain overcollaterlized. This is to ensure solvency of the AAVE protocol. If we fail to do so, we are at risk of being liquidated by others.
+
+### 3. Repaying the loan: DAI
+
+If we repay the exact amount of tokens we borrowed, we'll notice that we still have some borrowed tokens left. This is because while holding a borrowed position, it accrues interest. This debt remains outstanding unless it is paid off in full, either by passing `uint(-1)` as amount to repay (see [documentation](https://docs.aave.com/developers/v/2.0/the-core-protocol/lendingpool)) or buying some DAI through the Uniswap protocol in order to repay the remainder.
 
 
 ## Forking Mainnet for Testing
