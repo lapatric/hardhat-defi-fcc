@@ -21,6 +21,27 @@ async function main() {
 
     // borrow
     let { availableBorrowsETH , totalDebtETH } = await getBorrowUserData(lendingPool, deployer);
+    const daiPrice = await getDaiPrice();
+    const amountDaiToBorrow = availableBorrowsETH.toString() * 0.95 * (1 / daiPrice.toNumber()); // we borrow 95% of max
+    console.log(`You can borrow ${amountDaiToBorrow} DAI`);
+    const amountDaiToBorrowWei = ethers.utils.parseEther(amountDaiToBorrow.toString());
+    const daiTokenAddress = "0x6B175474E89094C44Da98b954EedeAC495271d0F";
+    await borrowDai(daiTokenAddress, lendingPool, amountDaiToBorrowWei, deployer);
+    await getBorrowUserData(lendingPool, deployer); // check our borrowing status again
+}
+
+async function borrowDai(daiAddress, lendingPool, amountDaiToBorrowWei, account) {
+    const borrowTx = await lendingPool.borrow(daiAddress, amountDaiToBorrowWei, 1, 0, account);
+    await borrowTx.wait(1);
+    console.log("You've borrowed!");
+}
+
+async function getDaiPrice() {
+    // no provider needed as we're only reading / not writing
+    const daiEthPriceFeed = await ethers.getContractAt("AggregatorV3Interface", "0x773616E4d11A78F511299002da57A0a94577F1f4");
+    const price = (await daiEthPriceFeed.latestRoundData())[1];
+    console.log(`The DAI/ETH price is ${price.toString()}`);
+    return price;
 }
 
 async function getBorrowUserData(lendingPool, account) {
