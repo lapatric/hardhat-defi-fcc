@@ -9,13 +9,26 @@ async function main() {
     // get lending pool contract
     const lendingPool = await getLendingPool(deployer); 
     console.log(`LendingPool address ${lendingPool.address}`);
-
-    const wethTokenAddress = "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2";
+    
     // approve lendingPool contract to take my WETH
+    const wethTokenAddress = "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2";
     await approveErc20(wethTokenAddress, lendingPool.address, AMOUNT, deployer);
     console.log("Depositing...");
+
+    // deposit to lendingPool
     await lendingPool.deposit(wethTokenAddress, AMOUNT, deployer, 0);
     console.log("Deposited!");
+
+    // borrow
+    let { availableBorrowsETH , totalDebtETH } = await getBorrowUserData(lendingPool, deployer);
+}
+
+async function getBorrowUserData(lendingPool, account) {
+    const { totalCollateralETH, totalDebtETH, availableBorrowsETH } = await lendingPool.getUserAccountData(account);
+    console.log(`You have ${totalCollateralETH} worth of ETH deposited!`);
+    console.log(`You have ${totalDebtETH} worth of ETH borrowed!`);
+    console.log(`You have ${availableBorrowsETH} worth of ETH!`);
+    return { availableBorrowsETH, totalDebtETH }
 }
 
 async function getLendingPool(account) {
